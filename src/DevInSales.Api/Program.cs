@@ -1,10 +1,14 @@
+using DevInSales.Api;
 using DevInSales.Core.Data.Context;
 using DevInSales.Core.Entities;
 using DevInSales.Core.Interfaces;
 using DevInSales.Core.Services;
 using DevInSales.EFCoreApi.Core.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +31,27 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+
+var chaveCriptografiaEmBytes = Encoding.ASCII.GetBytes(ChaveJWT.Chave);
+builder.Services.AddAuthentication(auth =>
+{
+    auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(auth =>
+{
+    auth.RequireHttpsMetadata = false;
+    auth.SaveToken = true;
+    auth.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(chaveCriptografiaEmBytes),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -41,11 +66,16 @@ builder.Services.AddSwaggerGen(c =>
             Url = new Uri("https://github.com/DEVin-Way2-Pixeon-Paradigma/M2P2-DEVinSales")
         }
     });
+
     var xmlFile = "DevInSales.API.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
     c.IncludeXmlComments(xmlPath);
 });
+
+builder.Services.AddCors();
+
+
 
 var app = builder.Build();
 
@@ -55,6 +85,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(cors =>
+{
+    cors.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+});
+
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

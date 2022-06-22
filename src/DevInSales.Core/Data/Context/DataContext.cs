@@ -21,7 +21,7 @@ namespace DevInSales.Core.Data.Context
         public DbSet<Sale> Sales { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<SaleProduct> SaleProducts { get; set; }
-
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
         

@@ -1,6 +1,7 @@
 using DevInSales.Api.Dtos;
 using DevInSales.Core.Entities;
 using DevInSales.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevInSales.Api.Controllers
@@ -82,6 +83,8 @@ namespace DevInSales.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        [Authorize(Roles = "Administrador")]
         public ActionResult GetCityById(int stateId, int cityId)
         {
             var state = _stateService.GetById(stateId);
