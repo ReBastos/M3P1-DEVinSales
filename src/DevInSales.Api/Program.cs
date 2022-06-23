@@ -30,6 +30,7 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 
 var chaveCriptografiaEmBytes = Encoding.ASCII.GetBytes(ChaveJWT.Chave);

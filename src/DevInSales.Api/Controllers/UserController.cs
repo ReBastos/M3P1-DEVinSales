@@ -2,6 +2,7 @@ using DevInSales.Api.Dtos;
 using DevInSales.Core.Entities;
 using DevInSales.EFCoreApi.Api.DTOs.Request;
 using DevInSales.EFCoreApi.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RegexExamples;
 
@@ -40,6 +41,7 @@ namespace DevInSales.Api.Controllers
         /// <response code="204">Pesquisa realizada com sucesso porém não retornou nenhum resultado</response>
 
         [HttpGet]
+        [Authorize(Roles = "Administrador, Gerente, Usuario")]
         public ActionResult<List<User>> ObterUsers(string? nome, string? DataMin, string? DataMax)
         {
 
@@ -73,6 +75,7 @@ namespace DevInSales.Api.Controllers
         /// <response code="200">Sucesso.</response>
         /// <response code="404">Not Found, estado não encontrado no stateId informado.</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrador, Gerente, Usuario")]
         public ActionResult<User> ObterUserPorId(int id)
         {
             var user = _userService.ObterPorId(id);
@@ -102,6 +105,7 @@ namespace DevInSales.Api.Controllers
         /// <response code="204">Pesquisa realizada com sucesso porém não retornou nenhum resultado</response>
         /// <response code="400">Formato invalido</response>
         [HttpPost]
+        [Authorize(Roles = "Administrador, Gerente")]
         public ActionResult CriarUser(AddUser model)
         {
             var user = new User(model.Email, model.Password, model.Name, model.BirthDate);
@@ -131,6 +135,7 @@ namespace DevInSales.Api.Controllers
         /// <response code="500">Internal Server Error, erro interno do servidor.</response>
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult ExcluirUser(int id)
         {
             try

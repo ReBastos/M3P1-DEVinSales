@@ -46,6 +46,7 @@ namespace DevInSales.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Administrador, Gerente, Usuario")]
         public ActionResult GetCityByStateId(int stateId, string? name)
         {
             var state = _stateService.GetById(stateId);
@@ -84,7 +85,7 @@ namespace DevInSales.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Gerente, Usuario")]
         public ActionResult GetCityById(int stateId, int cityId)
         {
             var state = _stateService.GetById(stateId);
@@ -119,6 +120,7 @@ namespace DevInSales.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Administrador, Gerente")]
         public ActionResult AddCity(int stateId, AddCity model)
         {
             var state = _stateService.GetById(stateId);

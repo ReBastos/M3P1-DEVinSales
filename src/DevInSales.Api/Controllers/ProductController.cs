@@ -1,6 +1,7 @@
 using DevInSales.Api.Dtos;
 using DevInSales.Core.Entities;
 using DevInSales.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevInSales.Api.Controllers
@@ -33,6 +34,7 @@ namespace DevInSales.Api.Controllers
         /// <response code="404">Not Found. O Produto solicitado não existe.</response>
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrador, Gerente, Usuario")]
         public ActionResult<Product> ObterProdutoPorId(int id)
         {
             var produto = _productService.ObterProductPorId(id);
@@ -60,6 +62,7 @@ namespace DevInSales.Api.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrador, Gerente")]
         public ActionResult AtualizarProduto(AddProduct model, int id)
         {
             var productOld = _productService.ObterProductPorId(id);
@@ -90,6 +93,7 @@ namespace DevInSales.Api.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Delete(int id)
         {
             try
