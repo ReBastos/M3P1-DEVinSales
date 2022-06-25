@@ -1,5 +1,6 @@
 using DevInSales.Core.Data.Context;
 using DevInSales.Core.Data.Dtos;
+using DevInSales.Core.Entities;
 using DevInSales.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,13 @@ namespace DevInSales.Core.Services
         {
             var state = _context.States.Include(p => p.Cities).FirstOrDefault(p => p.Id == stateId);
             return ReadState.StateToReadState(state);
+        }
+
+        public void Add(State state)
+        {
+            _context.States.Add(state);
+            _context.SaveChanges();
+
         }
     }
 }
