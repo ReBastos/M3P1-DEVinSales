@@ -75,8 +75,9 @@ namespace DevInSales.Test.Services
             Assert.Contains(1, result.Select(x => x.City.Id));
             Assert.Contains(1, result.Select(x => x.State.Id));
             Assert.Contains("Endereco 1", result.Select(x => x.Street));
-            
-          
+            Assert.Contains("44200-000", result.Select(x => x.Cep));
+
+
         }
 
         [Fact]
